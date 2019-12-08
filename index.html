@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>What time is it?</title>
+  <script>
+    document.addEventListener('DOMContentLoaded', function(){
+      const { ipcRenderer } = require('electron');
+      const spanTime = document.querySelector('.showTime');
+      const spanDay = document.querySelector('.showDay');
+      ipcRenderer.send('asynchronous-message', 'get data');
+      ipcRenderer.on('asynchronous-reply', (event, arg) => {
+        spanTime.textContent = arg.time;
+        spanDay.textContent = arg.day;
+      });
+    });
+  </script>
+  <style>
+    span{
+      display: inline-block;
+      margin-left: 10px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h2>What time is it?</h2>
+  <p>Now is<span class="showTime"></span></p>
+  <h2>What day is it today?</h2>
+  <p>Today is<span class="showDay"></span></p>
+</body>
+</html>
